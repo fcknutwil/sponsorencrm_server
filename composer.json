@@ -1,0 +1,16 @@
+{
+  "name": "fcknutwil/sponsorencrm_server",
+  "description": "Server des Sponsoren CRM",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Marcel Arnold",
+      "email": "mail@maesi.org"
+    }
+  ],
+  "require": {
+    "slim/slim": "3.8.1",
+    "simplon/mysql": "2.1.8"
+  }
+}
