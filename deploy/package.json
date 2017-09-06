@@ -1,0 +1,8 @@
+{
+  "name": "sponsorencrm_server_deployment",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {
+    "sftp-sync-deploy": "^0.6.2"
+  }
+}

@@ -3,3 +3,12 @@ php:
   - '7.1'
 before_script: composer install -d app
 script: php build.php
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script:
+      - ch deploy
+      - npm install
+      - node deploy.js $FTP_HOST $FTP_USER $FTP_PASSWORD
+    on:
+      branch: master
