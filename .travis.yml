@@ -7,7 +7,7 @@ deploy:
   - provider: script
     skip_cleanup: true
     script:
-      - ch deploy
+      - cd deploy
       - npm install
       - node deploy.js $FTP_HOST $FTP_USER $FTP_PASSWORD
     on:
