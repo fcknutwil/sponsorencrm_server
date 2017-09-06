@@ -1,0 +1,1 @@
+INSERT INTO users (name, password) VALUES ('maesi', SHA2('maesi', 512));

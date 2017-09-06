@@ -9,6 +9,9 @@
       "email": "mail@maesi.org"
     }
   ],
+  "config": {
+    "vendor-dir": "./src/vender"
+  },
   "require": {
     "slim/slim": "3.8.1",
     "simplon/mysql": "2.1.8"
