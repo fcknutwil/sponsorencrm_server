@@ -14,7 +14,7 @@ $phar->buildFromDirectory(dirname(__FILE__) . '/app', '/\.php$/');
 $phar->setStub($phar->createDefaultStub());
 
 // Create Index.php
-file_put_contents ( $destDir.'index.php', "<?php include 'crm.phar';");
+file_put_contents ( $destDir.'index.php', '<?php $PROD_MODE=true; include \'crm.phar\';');
 
 // .htaccess
 copy('app/.htaccess', $destDir . '.htaccess');
