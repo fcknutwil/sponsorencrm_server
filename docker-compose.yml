@@ -1,15 +1,13 @@
 version: '2'
 services:
   apache:
-    build: .
+    build: docker/web
     ports:
      - "1080:80"
     volumes:
-     - ./src:/var/www/html
-    depends_on:
-     - db
+     - ./app:/var/www/html
   db:
-    image: mysql:5.7
+    build: docker/db
     ports:
      - "3306:3306"
     volumes:

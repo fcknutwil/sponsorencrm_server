@@ -9,8 +9,11 @@
       "email": "mail@maesi.org"
     }
   ],
-  "config": {
-    "vendor-dir": "./src/vender"
+  "autoload": {
+    "psr-4": {
+      "org\\maesi\\": "org/maesi",
+      "ch\\fcknutwil\\": "ch/fcknutwil"
+    }
   },
   "require": {
     "slim/slim": "3.8.1",
