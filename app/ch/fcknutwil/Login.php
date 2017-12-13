@@ -15,7 +15,7 @@ class Login {
 
     private function initRoute() {
         $this->app->group('/login', function () {
-            $this->get('', function ($request, $response, $args) {
+            $this->get('/', function ($request, $response, $args) {
                 $res = DB::instance()->fetchRowMany('SELECT name, password FROM users');
                 $response = $response->withHeader('Content-Type', 'application/json');
                 return $response->write(json_encode($res, JSON_UNESCAPED_SLASHES));
