@@ -25,5 +25,6 @@ $app->add(new \Tuupola\Middleware\JwtAuthentication([
     "secret" => \org\maesi\JWT::getPrivateKey()
 ]));
 new \ch\fcknutwil\Login($app);
+new \ch\fcknutwil\Test($app);
 // Run app
 $app->run();

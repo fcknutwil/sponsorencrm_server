@@ -3,7 +3,7 @@ namespace ch\fcknutwil;
 
 use Slim\App;
 
-class Login {
+class Test {
 
     private $app;
 
