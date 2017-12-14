@@ -16,7 +16,8 @@
     }
   },
   "require": {
-    "slim/slim": "3.8.1",
-    "simplon/mysql": "2.1.8"
+    "slim/slim": "3.9.2",
+    "simplon/mysql": "2.2.10",
+    "tuupola/slim-jwt-auth": "3.0.0-rc.3"
   }
 }
