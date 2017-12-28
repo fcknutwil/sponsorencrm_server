@@ -2,6 +2,7 @@
 namespace ch\fcknutwil;
 
 use org\maesi\DB;
+use org\maesi\ErrorResponseCreator;
 use org\maesi\JWT;
 use Slim\App;
 
@@ -23,7 +24,7 @@ class Login {
                     $token = JWT::create($res);
                     return $response->withJson(['token' => $token, 'expire' => JWT::getClaim($token, 'exp')]);
                 } else {
-                    return $response->withJson(['message' => 'Login nicht erfolgreich'], 401);
+                    return $response->withJson(ErrorResponseCreator::create('Login nicht erfolgreich'), 401);
                 }
             });
         });

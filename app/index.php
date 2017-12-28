@@ -21,10 +21,10 @@ $configuration = [
 $c = new \Slim\Container($configuration);
 $app = new \Slim\App($c);
 $app->add(new \Tuupola\Middleware\JwtAuthentication([
-    "path" => ["/test"],
+    "path" => [\ch\fcknutwil\crm\sponsoren\Base::getPath()],
     "secret" => \org\maesi\JWT::getPrivateKey()
 ]));
 new \ch\fcknutwil\Login($app);
-new \ch\fcknutwil\Test($app);
+new \ch\fcknutwil\crm\sponsoren\Typ($app);
 // Run app
 $app->run();
