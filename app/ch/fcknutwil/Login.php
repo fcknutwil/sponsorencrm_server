@@ -16,15 +16,14 @@ class Login {
 
     private function initRoute() {
         $this->app->group('/login', function () {
-            $this->put('', function ($request, $response, $args) {
+            $this->put('', function ($request, $response) {
                 $body = $request->getParsedBody();
                 $res = DB::instance()->fetchRow('SELECT id AS sub FROM users WHERE name=:name AND password=SHA2(:password, 512)', $body);
-                $response = $response->withHeader('Content-Type', 'application/json');
                 if($res) {
                     $token = JWT::create($res);
-                    return $response->write(json_encode((object) ['token' => $token, 'expire' => JWT::getClaim($token, 'exp')], JSON_UNESCAPED_SLASHES));
+                    return $response->withJson(['token' => $token, 'expire' => JWT::getClaim($token, 'exp')]);
                 } else {
-                    return $response->withStatus(401)->write(json_encode((object) ['message' => 'Login nicht erfolgreich'], JSON_UNESCAPED_SLASHES));
+                    return $response->withJson(['message' => 'Login nicht erfolgreich'], 401);
                 }
             });
         });
