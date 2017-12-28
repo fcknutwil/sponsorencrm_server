@@ -18,10 +18,11 @@ class Login {
         $this->app->group('/login', function () {
             $this->put('', function ($request, $response, $args) {
                 $body = $request->getParsedBody();
-                $res = DB::instance()->fetchRow('SELECT count(id) AS correct FROM users WHERE name=:name AND password=SHA2(:password, 512)', $body);
+                $res = DB::instance()->fetchRow('SELECT id AS userid FROM users WHERE name=:name AND password=SHA2(:password, 512)', $body);
                 $response = $response->withHeader('Content-Type', 'application/json');
-                if($res['correct'] == 1) {
-                    return $response->write(json_encode((object) ['key' => JWT::getPrivateKey()], JSON_UNESCAPED_SLASHES));
+                if($res) {
+                    $token = JWT::create($res);
+                    return $response->write(json_encode((object) ['token' => $token, 'expire' => JWT::getClaim($token, 'exp')], JSON_UNESCAPED_SLASHES));
                 } else {
                     return $response->withStatus(401)->write(json_encode((object) ['message' => 'Login nicht erfolgreich'], JSON_UNESCAPED_SLASHES));
                 }
