@@ -47,13 +47,13 @@ CREATE TABLE sponsor (
   vorname       VARCHAR(50) DEFAULT NULL,
   strasse       VARCHAR(100) DEFAULT NULL,
   fk_ort        INT(6) UNSIGNED NOT NULL,
-  telefon       VARCHAR(12) DEFAULT NULL,
+  telefon       VARCHAR(16) DEFAULT NULL,
   email         VARCHAR(100) DEFAULT NULL,
   homepage      VARCHAR(100) DEFAULT NULL,
   notiz         TEXT DEFAULT NULL,
   name_ansprechpartner     VARCHAR(50) DEFAULT NULL,
   email_ansprechpartner    VARCHAR(100) DEFAULT NULL,
-  telefon_ansprechpartner  VARCHAR(12) DEFAULT NULL,
+  telefon_ansprechpartner  VARCHAR(16) DEFAULT NULL,
   typ           ENUM('Firma', 'Privatperson') NOT NULL DEFAULT 'Firma',
   FOREIGN KEY (fk_ort) REFERENCES ort(id)
 );
