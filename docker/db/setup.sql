@@ -18,14 +18,14 @@ CREATE TABLE typ (
   readonly TINYINT(1) UNSIGNED NOT NULL DEFAULT 0
 );
 INSERT INTO typ (name, readonly) VALUES ('Hauptsponsor', 1);
-INSERT INTO typ (name, readonly) VALUES ('AusrÃ¼ster', 1);
+INSERT INTO typ (name, readonly) VALUES ('Ausrüster', 1);
 INSERT INTO typ (name, readonly) VALUES ('Teamsponsor', 1);
 
 CREATE TABLE engagement (
   id       INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   name     VARCHAR(50) NOT NULL UNIQUE KEY,
   betrag   DECIMAL(8, 2) NOT NULL,
-  zahlung  ENUM('JÃ¤hrlich', 'Einmalig') NOT NULL DEFAULT 'JÃ¤hrlich'
+  zahlung  ENUM('Jährlich', 'Einmalig') NOT NULL DEFAULT 'Jährlich'
 );
 
 CREATE TABLE engagement_typ (
