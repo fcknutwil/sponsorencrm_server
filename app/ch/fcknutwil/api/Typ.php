@@ -1,5 +1,5 @@
 <?php
-namespace ch\fcknutwil\crm\sponsoren;
+namespace ch\fcknutwil\api;
 
 use org\maesi\DB;
 use org\maesi\ErrorResponseCreator;

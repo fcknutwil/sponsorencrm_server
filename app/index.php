@@ -19,7 +19,7 @@ $configuration = [
 $c = new \Slim\Container($configuration);
 $app = new \Slim\App($c);
 $app->add(new \Tuupola\Middleware\JwtAuthentication([
-    "path" => [\ch\fcknutwil\crm\sponsoren\Base::getPath()],
+    "path" => [\ch\fcknutwil\api\Base::getPath()],
     "secret" => \org\maesi\JWT::getPrivateKey(),
     "header" => "X-Authorization",
     "error" => function ($request, $response, $arguments) {
@@ -30,6 +30,6 @@ $app->add(new \Tuupola\Middleware\JwtAuthentication([
     }
 ]));
 new \ch\fcknutwil\Login($app);
-new \ch\fcknutwil\crm\sponsoren\Typ($app);
+new \ch\fcknutwil\api\Typ($app);
 // Run app
 $app->run();
