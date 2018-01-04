@@ -11,8 +11,6 @@ if($PROD_MODE) {
 require 'jwt.config.php';
 \org\maesi\JWT::config($jwt_config);
 
-
-
 $configuration = [
     'settings' => [
         'displayErrorDetails' => true,
@@ -22,7 +20,14 @@ $c = new \Slim\Container($configuration);
 $app = new \Slim\App($c);
 $app->add(new \Tuupola\Middleware\JwtAuthentication([
     "path" => [\ch\fcknutwil\crm\sponsoren\Base::getPath()],
-    "secret" => \org\maesi\JWT::getPrivateKey()
+    "secret" => \org\maesi\JWT::getPrivateKey(),
+    "header" => "X-Authorization",
+    "error" => function ($request, $response, $arguments) {
+        $data = [];
+        $data["status"] = "error";
+        $data["message"] = $arguments["message"];
+        return $response->withJson($data);
+    }
 ]));
 new \ch\fcknutwil\Login($app);
 new \ch\fcknutwil\crm\sponsoren\Typ($app);
