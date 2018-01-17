@@ -57,6 +57,10 @@ class Typ extends Base{
                     return $response->withJson(ErrorResponseCreator::createDuplicate('name'), 422);
                 }
             });
+            $this->delete('/{id}', function ($request, $response, $args) {
+                DB::instance()->delete('typ', ['id' => $args['id']]);
+                return $response->withStatus(204);
+            });
         });
     }
 }

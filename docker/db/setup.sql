@@ -23,7 +23,7 @@ CREATE TABLE engagement (
   id       INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   name     VARCHAR(50) NOT NULL UNIQUE KEY,
   betrag   DECIMAL(8, 2) NOT NULL,
-  zahlung  ENUM('Jährlich', 'Einmalig') NOT NULL DEFAULT 'Jährlich'
+  zahlung  ENUM('annual', 'onetime') NOT NULL DEFAULT 'annual'
 );
 
 CREATE TABLE engagement_typ (
@@ -54,7 +54,7 @@ CREATE TABLE sponsor (
   name_ansprechpartner     VARCHAR(50) DEFAULT NULL,
   email_ansprechpartner    VARCHAR(100) DEFAULT NULL,
   telefon_ansprechpartner  VARCHAR(16) DEFAULT NULL,
-  typ           ENUM('Firma', 'Privatperson') NOT NULL DEFAULT 'Firma',
+  typ           ENUM('company', 'individual') NOT NULL DEFAULT 'company',
   FOREIGN KEY (fk_ort) REFERENCES ort(id)
 );
 
@@ -70,7 +70,7 @@ CREATE TABLE sponsor_engagement (
 
 CREATE TABLE beziehung (
   id          INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  typ         ENUM('CRM', 'Donatoren', 'Andere') NOT NULL DEFAULT 'CRM',
+  typ         ENUM('crm', 'donator', 'other') NOT NULL DEFAULT 'crm',
   value       VARCHAR(50) NOT NULL,
   notizen     TEXT DEFAULT NULL,
   fk_sponsor  INT(6) UNSIGNED NOT NULL,

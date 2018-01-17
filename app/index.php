@@ -33,5 +33,6 @@ new \ch\fcknutwil\Login($app);
 new \ch\fcknutwil\api\Sponsor($app);
 new \ch\fcknutwil\api\Engagement($app);
 new \ch\fcknutwil\api\Typ($app);
+new \ch\fcknutwil\api\Ort($app);
 // Run app
 $app->run();
