@@ -1,4 +1,5 @@
 INSERT INTO users (name, password) VALUES ('maesi', SHA2('maesi', 512));
+INSERT INTO users (name, password) VALUES ('cas', SHA2('fee', 512));
 
 INSERT INTO typ (name) VALUES ('Bandenwerbung');
 
