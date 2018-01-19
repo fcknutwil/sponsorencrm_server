@@ -7,3 +7,4 @@ after_success:
   - cd deploy
   - npm install
   - node deploy.js $FTP_HOST $FTP_USER $FTP_PASSWORD
+  - node deploy.js $FTP_HOST $FTP_USER_SANDBOX $FTP_PASSWORD_SANDBOX
