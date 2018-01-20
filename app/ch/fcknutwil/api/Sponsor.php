@@ -78,7 +78,7 @@ class Sponsor extends Base{
                 if($res) {
                     return $response->withJson($res);
                 }
-                return $response->withJson(ErrorResponseCreator::createNotFound(), 404);
+                return $response->withJson([]);
             });
             $this->get('/{id}', function ($request, $response, $args) {
                 $res = DB::instance()->fetchRow('SELECT se.*, e.name FROM sponsor_engagement AS se
