@@ -6,7 +6,7 @@ if($PROD_MODE) {
 } else {
     require 'dev.db.config.php';
 }
-\org\maesi\DB::config($db_config);
+\org\maesi\DB::config($db_config, $db_config_crm, $db_config_donatoren_crm);
 
 require 'jwt.config.php';
 \org\maesi\JWT::config($jwt_config);
@@ -34,5 +34,6 @@ new \ch\fcknutwil\api\Sponsor($app);
 new \ch\fcknutwil\api\Engagement($app);
 new \ch\fcknutwil\api\Typ($app);
 new \ch\fcknutwil\api\Ort($app);
+new \ch\fcknutwil\api\Beziehungen($app);
 // Run app
 $app->run();
