@@ -22,12 +22,16 @@ class Engagement extends Base
         $this->app->group(self::getPath() . '/engagement', function () {
             $this->get('', function ($request, $response) {
                 $res = DB::instance()->fetchRowMany('SELECT * FROM engagement');
+                foreach ($res as &$e) {
+                    $e['seebli'] = $e['seebli'] == '1';
+                }
                 return $response->withJson($res);
             });
             $this->get('/{id}', function ($request, $response, $args) {
                 $res = DB::instance()->fetchRow('SELECT * FROM engagement WHERE id=:id', $args);
                 if ($res) {
                     $res['types'] = DB::instance()->fetchColumnMany('SELECT fk_typ FROM engagement_typ WHERE fk_engagement=:id', ['id' => $res['id']]);
+                    $res['seebli'] = $res['seebli'] == '1';
                     return $response->withJson($res);
                 }
                 return $response->withJson(ErrorResponseCreator::createNotFound(), 404);
@@ -40,22 +44,24 @@ class Engagement extends Base
                         DB::instance()->insert('engagement_typ', [fk_engagement=> $args['id'], fk_typ => $type]);
                     }
                 }
-                DB::instance()->update('engagement', ['id' => $args['id']], ['name' => $body['name'], 'betrag' => $body['betrag'], 'zahlung' => $body['zahlung']]);
+                DB::instance()->update('engagement', ['id' => $args['id']], ['name' => $body['name'], 'betrag' => $body['betrag'], 'seebli' => ($body['seebli'] ? '1' : '0'), 'zahlung' => $body['zahlung']]);
 
 
                 $res = DB::instance()->fetchRow('SELECT * FROM engagement WHERE id=:id', $args);
+                $res['seebli'] = $res['seebli'] == '1';
                 return $response->withJson($res);
             });
             $this->post('', function ($request, $response, $args) {
                 $body = $request->getParsedBody();
-                $id = DB::instance()->insert('engagement', ['name' => $body['name'], 'betrag' => $body['betrag'], 'zahlung' => $body['zahlung']]);
+                $id = DB::instance()->insert('engagement', ['name' => $body['name'], 'betrag' => $body['betrag'], 'seebli' => ($body['seebli'] ? '1' : '0'), 'zahlung' => $body['zahlung']]);
                 if(is_array($body['types'])) {
                     foreach($body['types'] as $type) {
                         DB::instance()->insert('engagement_typ', [fk_engagement=> $id, fk_typ => $type]);
                     }
                 }
                 $res = DB::instance()->fetchRow('SELECT * FROM engagement WHERE id=:id', ['id' => $id]);
-                return $response->withJson($res);
+                $res['seebli'] = $res['seebli'] == '1';
+                return $response->withJson($res, 201);
             });
             $this->delete('/{id}', function ($request, $response, $args) {
                 DB::instance()->delete('engagement_typ', ['fk_engagement' => $args['id']]);

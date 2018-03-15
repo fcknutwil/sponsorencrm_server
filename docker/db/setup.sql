@@ -23,6 +23,7 @@ CREATE TABLE engagement (
   id       INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   name     VARCHAR(50) NOT NULL UNIQUE KEY,
   betrag   DECIMAL(8, 2) NOT NULL,
+  seebli   TINYINT(1) DEFAULT 0,
   zahlung  ENUM('annual', 'onetime') NOT NULL DEFAULT 'annual'
 );
 
