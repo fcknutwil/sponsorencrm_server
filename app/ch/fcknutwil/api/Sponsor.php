@@ -68,6 +68,53 @@ class Sponsor extends Base{
                 }
                 return $response->withJson(ErrorResponseCreator::createNotFound(), 404);
             });
+
+            $this->app->group('/{id}/beziehung', function () {
+                $this->post('', function ($request, $response, $args) {
+                    $body = $request->getParsedBody();
+                    $res = DB::instance()->update->update(
+                        'sponsor',
+                        ["typ" => $body['typ'], "value" => $body['value'], "notizen" => $body['notizen'], "fk_sponsor" => $args['id']]
+                    );
+                    return $response->withStatus(204);
+                });
+                $this->get('/{bezid}', function ($request, $response, $args) {
+                    $res = DB::instance()->fetchRowMany('SELECT id, typ, value, notizen FROM beziehung WHERE id=:bezid', $args);
+                    foreach ($res as &$beziehung) {
+                        switch ($beziehung['typ']) {
+                            case 'crm':
+                                $beziehung['name'] = DB::instance(DB::$TYP_MITGLIEDER_CRM)->fetchColumn(
+                                    'SELECT CONCAT(m.vorname, " ", m.nachname, " ", o.ort) FROM mitglied AS m LEFT JOIN ort AS o ON m.fk_ort=o.id WHERE m.id=id',
+                                    ['id' => $beziehung['id']]
+                                );
+                                break;
+                            case 'donator':
+                                $beziehung['name'] = DB::instance(DB::$TYP_DONATOREN_CRM)->fetchColumn(
+                                    'SELECT CONCAT(m.vorname, " ", m.nachname, " ", o.ort) FROM mitglied AS m LEFT JOIN ort AS o ON m.fk_ort=o.id WHERE m.id=id',
+                                    ['id' => $beziehung['id']]
+                                );
+                                break;
+                            case 'other':
+                            default:
+                                $beziehung['name'] = $beziehung['value'];
+                        }
+                    }
+                    return $response->withJson($res);
+                });
+                $this->put('/{bezid}', function ($request, $response, $args) {
+                    $body = $request->getParsedBody();
+                    $res = DB::instance()->update->update(
+                        'sponsor',
+                        ["id" => $args["bezid"]],
+                        ["typ" => $body['typ'], "value" => $body['value'], "notizen" => $body['notizen']]
+                    );
+                    return $response->withStatus(204);
+                });
+                $this->delete('/{bezid}', function ($request, $response, $args) {
+                    DB::instance()->delete('beziehung', ['id' => $args['bezid']]);
+                    return $response->withStatus(204);
+                });
+            });
         });
 
         $this->app->group(self::getPath() . '/sponsor/{sponsorid}/engagement', function () {
