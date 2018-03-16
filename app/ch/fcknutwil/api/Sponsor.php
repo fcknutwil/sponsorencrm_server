@@ -91,13 +91,13 @@ class Sponsor extends Base
                         switch ($beziehung['typ']) {
                             case 'crm':
                                 $beziehung['name'] = DB::instance(DB::$TYP_MITGLIEDER_CRM)->fetchColumn(
-                                    'SELECT CONCAT(m.vorname, " ", m.nachname, " ", o.ort) FROM mitglied AS m LEFT JOIN ort AS o ON m.fk_ort=o.id WHERE m.id=id',
+                                    'SELECT CONCAT(m.vorname, " ", m.nachname, " ", o.ort) FROM mitglied AS m LEFT JOIN ort AS o ON m.fk_ort=o.id WHERE m.id=:id',
                                     ['id' => $beziehung['id']]
                                 );
                                 break;
                             case 'donator':
                                 $beziehung['name'] = DB::instance(DB::$TYP_DONATOREN_CRM)->fetchColumn(
-                                    'SELECT CONCAT(m.vorname, " ", m.nachname, " ", o.ort) FROM mitglied AS m LEFT JOIN ort AS o ON m.fk_ort=o.id WHERE m.id=id',
+                                    'SELECT CONCAT(m.vorname, " ", m.nachname, " ", o.ort) FROM mitglied AS m LEFT JOIN ort AS o ON m.fk_ort=o.id WHERE m.id=:id',
                                     ['id' => $beziehung['id']]
                                 );
                                 break;
@@ -116,13 +116,13 @@ class Sponsor extends Base
                     switch ($res['typ']) {
                         case 'crm':
                             $res['name'] = DB::instance(DB::$TYP_MITGLIEDER_CRM)->fetchColumn(
-                                'SELECT CONCAT(m.vorname, " ", m.nachname, " ", o.ort) FROM mitglied AS m LEFT JOIN ort AS o ON m.fk_ort=o.id WHERE m.id=id',
+                                'SELECT CONCAT(m.vorname, " ", m.nachname, " ", o.ort) FROM mitglied AS m LEFT JOIN ort AS o ON m.fk_ort=o.id WHERE m.id=:id',
                                 ['id' => $res['id']]
                             );
                             break;
                         case 'donator':
                             $res['name'] = DB::instance(DB::$TYP_DONATOREN_CRM)->fetchColumn(
-                                'SELECT CONCAT(m.vorname, " ", m.nachname, " ", o.ort) FROM mitglied AS m LEFT JOIN ort AS o ON m.fk_ort=o.id WHERE m.id=id',
+                                'SELECT CONCAT(m.vorname, " ", m.nachname, " ", o.ort) FROM mitglied AS m LEFT JOIN ort AS o ON m.fk_ort=o.id WHERE m.id=:id',
                                 ['id' => $res['id']]
                             );
                             break;
