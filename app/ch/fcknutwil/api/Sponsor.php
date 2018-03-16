@@ -83,7 +83,10 @@ class Sponsor extends Base
                     return $response->withStatus(204);
                 });
                 $this->get('', function ($request, $response, $args) {
-                    $res = DB::instance()->fetchRowMany('SELECT id, typ, value, notizen FROM beziehung', $args);
+                    $res = DB::instance()->fetchRowMany(
+                        'SELECT id, typ, value, notizen FROM beziehung WHERE fk_sponsor=:id',
+                        ['id' => $args['id']]
+                    );
                     foreach ($res as &$beziehung) {
                         switch ($beziehung['typ']) {
                             case 'crm':
@@ -106,7 +109,10 @@ class Sponsor extends Base
                     return $response->withJson($res);
                 });
                 $this->get('/{bezid}', function ($request, $response, $args) {
-                    $res = DB::instance()->fetchRow('SELECT id, typ, value, notizen FROM beziehung WHERE id=:bezid', $args);
+                    $res = DB::instance()->fetchRow(
+                        'SELECT id, typ, value, notizen FROM beziehung WHERE id=:bezid',
+                        ['bezid' => $args['bezid']]
+                    );
                     switch ($res['typ']) {
                         case 'crm':
                             $res['name'] = DB::instance(DB::$TYP_MITGLIEDER_CRM)->fetchColumn(
