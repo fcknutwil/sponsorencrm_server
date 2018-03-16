@@ -82,8 +82,8 @@ class Sponsor extends Base
                     );
                     return $response->withStatus(204);
                 });
-                $this->get('/{bezid}', function ($request, $response, $args) {
-                    $res = DB::instance()->fetchRowMany('SELECT id, typ, value, notizen FROM beziehung WHERE id=:bezid', $args);
+                $this->get('', function ($request, $response, $args) {
+                    $res = DB::instance()->fetchRowMany('SELECT id, typ, value, notizen FROM beziehung', $args);
                     foreach ($res as &$beziehung) {
                         switch ($beziehung['typ']) {
                             case 'crm':
@@ -103,6 +103,28 @@ class Sponsor extends Base
                                 $beziehung['name'] = $beziehung['value'];
                         }
                     }
+                    return $response->withJson($res);
+                });
+                $this->get('/{bezid}', function ($request, $response, $args) {
+                    $res = DB::instance()->fetchRow('SELECT id, typ, value, notizen FROM beziehung WHERE id=:bezid', $args);
+                    switch ($res['typ']) {
+                        case 'crm':
+                            $res['name'] = DB::instance(DB::$TYP_MITGLIEDER_CRM)->fetchColumn(
+                                'SELECT CONCAT(m.vorname, " ", m.nachname, " ", o.ort) FROM mitglied AS m LEFT JOIN ort AS o ON m.fk_ort=o.id WHERE m.id=id',
+                                ['id' => $res['id']]
+                            );
+                            break;
+                        case 'donator':
+                            $res['name'] = DB::instance(DB::$TYP_DONATOREN_CRM)->fetchColumn(
+                                'SELECT CONCAT(m.vorname, " ", m.nachname, " ", o.ort) FROM mitglied AS m LEFT JOIN ort AS o ON m.fk_ort=o.id WHERE m.id=id',
+                                ['id' => $res['id']]
+                            );
+                            break;
+                        case 'other':
+                        default:
+                            $res['name'] = $res['value'];
+                    }
+
                     return $response->withJson($res);
                 });
                 $this->put('/{bezid}', function ($request, $response, $args) {
