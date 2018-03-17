@@ -35,7 +35,9 @@ class Sponsor extends Base
             });
             $this->put('/{id}', function ($request, $response, $args) {
                 $body = $request->getParsedBody();
-                $res = DB::instance()->update('sponsor', ["id" => $args["id"]],
+                $res = DB::instance()->update(
+                    'sponsor',
+                    ["id" => $args["id"]],
                     [
                         "name" => $body['name'], "vorname" => $body['vorname'], "strasse" => $body['strasse'], "fk_ort" => $body['fk_ort'],
                         "telefon" => $body['telefon'], "email" => $body["email"], "homepage" => $body["homepage"], "notiz" => $body["notiz"],
@@ -77,7 +79,7 @@ class Sponsor extends Base
                 $this->post('', function ($request, $response, $args) {
                     $body = $request->getParsedBody();
                     $res = DB::instance()->insert(
-                        'sponsor',
+                        'beziehung',
                         ["typ" => $body['typ'], "value" => $body['value'], "notizen" => $body['notizen'], "fk_sponsor" => $args['id']]
                     );
                     return $response->withStatus(204);
@@ -92,13 +94,13 @@ class Sponsor extends Base
                             case 'crm':
                                 $beziehung['name'] = DB::instance(DB::$TYP_MITGLIEDER_CRM)->fetchColumn(
                                     'SELECT CONCAT(m.vorname, " ", m.nachname, ", ", o.ort) FROM mitglied AS m LEFT JOIN ort AS o ON m.fk_ort=o.id WHERE m.id=:id',
-                                    ['id' => $beziehung['id']]
+                                    ['id' => $beziehung['value']]
                                 );
                                 break;
                             case 'donator':
                                 $beziehung['name'] = DB::instance(DB::$TYP_DONATOREN_CRM)->fetchColumn(
                                     'SELECT CONCAT(m.vorname, " ", m.nachname, ", ", o.ort) FROM mitglied AS m LEFT JOIN ort AS o ON m.fk_ort=o.id WHERE m.id=:id',
-                                    ['id' => $beziehung['id']]
+                                    ['id' => $beziehung['value']]
                                 );
                                 break;
                             case 'other':
@@ -117,13 +119,13 @@ class Sponsor extends Base
                         case 'crm':
                             $res['name'] = DB::instance(DB::$TYP_MITGLIEDER_CRM)->fetchColumn(
                                 'SELECT CONCAT(m.vorname, " ", m.nachname, ", ", o.ort) FROM mitglied AS m LEFT JOIN ort AS o ON m.fk_ort=o.id WHERE m.id=:id',
-                                ['id' => $res['id']]
+                                ['id' => $res['value']]
                             );
                             break;
                         case 'donator':
                             $res['name'] = DB::instance(DB::$TYP_DONATOREN_CRM)->fetchColumn(
                                 'SELECT CONCAT(m.vorname, " ", m.nachname, ", ", o.ort) FROM mitglied AS m LEFT JOIN ort AS o ON m.fk_ort=o.id WHERE m.id=:id',
-                                ['id' => $res['id']]
+                                ['id' => $res['value']]
                             );
                             break;
                         case 'other':
@@ -135,8 +137,8 @@ class Sponsor extends Base
                 });
                 $this->put('/{bezid}', function ($request, $response, $args) {
                     $body = $request->getParsedBody();
-                    $res = DB::instance()->update->update(
-                        'sponsor',
+                    $res = DB::instance()->update(
+                        'beziehung',
                         ["id" => $args["bezid"]],
                         ["typ" => $body['typ'], "value" => $body['value'], "notizen" => $body['notizen']]
                     );
