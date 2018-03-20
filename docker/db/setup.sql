@@ -72,7 +72,7 @@ CREATE TABLE sponsor (
 
 CREATE TABLE content(
   id        INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-  mimtype   VARCHAR(50) NOT NULL UNIQUE KEY,
+  mimetype   VARCHAR(50) NOT NULL UNIQUE KEY,
   size      INT(4) DEFAULT 0,
   content   LONGBLOB NOT NULL
 );
