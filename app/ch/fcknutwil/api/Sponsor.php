@@ -42,7 +42,8 @@ class Sponsor extends Base
                         "name" => $body['name'], "vorname" => $body['vorname'], "strasse" => $body['strasse'], "fk_ort" => $body['fk_ort'],
                         "telefon" => $body['telefon'], "email" => $body["email"], "homepage" => $body["homepage"], "notiz" => $body["notiz"],
                         "name_ansprechpartner" => $body['name_ansprechpartner'], "email_ansprechpartner" => $body['email_ansprechpartner'],
-                        "telefon_ansprechpartner" => $body['telefon_ansprechpartner'], "typ" => $body["typ"]
+                        "telefon_ansprechpartner" => $body['telefon_ansprechpartner'], "typ" => $body["typ"],
+                        "changed_user" => $request->getAttribute('token')->sub, "changed_time" => date("Y-m-d H:i:s")
                     ]
                 );
                 $res = DB::instance()->fetchRow('SELECT s.*, CONCAT(o.plz, " ", o.ort) AS ortstring FROM sponsor AS s 
@@ -64,7 +65,7 @@ class Sponsor extends Base
                         "name" => $body['name'], "vorname" => $body['vorname'], "strasse" => $body['strasse'], "fk_ort" => $body['fk_ort'],
                         "telefon" => $body['telefon'], "email" => $body["email"], "homepage" => $body["homepage"], "notiz" => $body["notiz"],
                         "name_ansprechpartner" => $body['name_ansprechpartner'], "email_ansprechpartner" => $body['email_ansprechpartner'],
-                        "telefon_ansprechpartner" => $body['telefon_ansprechpartner'], "typ" => $body["typ"]
+                        "telefon_ansprechpartner" => $body['telefon_ansprechpartner'], "typ" => $body["typ"], "changed_user" => $request->getAttribute('token')->sub
                     ]
                 );
                 $res = DB::instance()->fetchRow('SELECT s.*, CONCAT(o.plz, " ", o.ort) AS ortstring FROM sponsor AS s 

@@ -1,5 +1,4 @@
-INSERT INTO users (name, password) VALUES ('maesi', SHA2('maesi', 512));
-INSERT INTO users (name, password) VALUES ('cas', SHA2('fee', 512));
+INSERT INTO users (name, nachname, vorname, email, password) VALUES ('marcel.arnold', 'Arnold', 'Marcel', 'mail@maesi.org', SHA2('marcel.arnold', 512));
 
 INSERT INTO typ (name) VALUES ('Bandenwerbung');
 
@@ -20,12 +19,12 @@ INSERT INTO engagement (name, betrag) VALUES ('Bandenwerbung', 200);
 INSERT INTO engagement_typ (fk_typ, fk_engagement) VALUES (4, 4);
 
 INSERT INTO sponsor (typ, name, strasse, fk_ort, telefon, email, homepage, name_ansprechpartner, email_ansprechpartner,
-                     telefon_ansprechpartner) VALUES
+                     telefon_ansprechpartner, changed_user) VALUES
   ('company', 'Die Mobiliar', 'Bundesgasse 35', 1241, '+41 31 389 70 50', 'info@mobiliar.ch', 'http://www.mobiliar.ch',
-   'Marcel Arnold', 'marcel.arnold@mobiliar.ch', '+41 31 389 76 17');
-INSERT INTO sponsor (typ, name, vorname, strasse, fk_ort, telefon, email, homepage) VALUES
+   'Marcel Arnold', 'marcel.arnold@mobiliar.ch', '+41 31 389 76 17', 1);
+INSERT INTO sponsor (typ, name, vorname, strasse, fk_ort, telefon, email, homepage,changed_user) VALUES
   ('individual', 'Arnold', 'Marcel', 'Centralstrasse 31c', 2469, '+41 76 661 53 21', 'mail@maesi.org',
-   'http://www.maesi.org');
+   'http://www.maesi.org', 1);
 
 INSERT INTO sponsor_engagement (fk_sponsor, fk_engagement, von) VALUES (1, 4, '2016-01-01');
 INSERT INTO sponsor_engagement (fk_sponsor, fk_engagement, von, bis) VALUES (1, 3, '2014-01-01', '2015-12-31');

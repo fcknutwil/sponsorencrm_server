@@ -19,7 +19,7 @@ class Login {
         $this->app->group('/login', function () {
             $this->put('', function ($request, $response) {
                 $body = $request->getParsedBody();
-                $res = DB::instance()->fetchRow('SELECT id AS sub FROM users WHERE name=:name AND password=SHA2(:password, 512)', $body);
+                $res = DB::instance()->fetchRow('SELECT id AS sub FROM users WHERE name=:name AND password=SHA2(:password, 512) AND active=1', $body);
                 if($res) {
                     $token = JWT::create($res);
                     return $response->withJson(['token' => $token, 'expire' => JWT::getClaim($token, 'exp')]);

@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS logo;
 DROP TABLE IF EXISTS dokument;
 DROP TABLE IF EXISTS content;
@@ -9,11 +8,16 @@ DROP TABLE IF EXISTS engagement;
 DROP TABLE IF EXISTS beziehung;
 DROP TABLE IF EXISTS ort;
 DROP TABLE IF EXISTS sponsor;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
   id       INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   name     VARCHAR(30) NOT NULL UNIQUE KEY,
-  password VARCHAR(128) NOT NULL
+  password VARCHAR(128) NOT NULL,
+  active   TINYINT(1) UNSIGNED NOT NULL DEFAULT 1,
+  nachname VARCHAR(30) DEFAULT NULL,
+  vorname  VARCHAR(30) DEFAULT NULL,
+  email    VARCHAR(60) DEFAULT NULL
 );
 
 CREATE TABLE typ (
@@ -59,7 +63,11 @@ CREATE TABLE sponsor (
   email_ansprechpartner    VARCHAR(100) DEFAULT NULL,
   telefon_ansprechpartner  VARCHAR(16) DEFAULT NULL,
   typ           ENUM('company', 'individual') NOT NULL DEFAULT 'company',
-  FOREIGN KEY (fk_ort) REFERENCES ort(id)
+  changed_user  INT(6) UNSIGNED NOT NULL,
+  changed_time  TIMESTAMP DEFAULT NOW(),
+
+  FOREIGN KEY (fk_ort) REFERENCES ort(id),
+  FOREIGN KEY (changed_user) REFERENCES users(id)
 );
 
 CREATE TABLE content(
