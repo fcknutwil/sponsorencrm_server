@@ -149,6 +149,80 @@ class Sponsor extends Base
                     return $response->withStatus(204);
                 });
             });
+            $this->group('/{id}/dokument', function () {
+                $this->get('', function ($request, $response) {
+                    $res = DB::instance()->fetchRowMany(
+                        'SELECT d.id, d.name, c.mimetype, c.size FROM dokument AS d LEFT JOIN content AS c ON d.fk_content=c.id'
+                    );
+                    return $response->withJson($res);
+                });
+                $this->post('', function ($request, $response, $args) {
+                    $body = $request->getParsedBody();
+                    try {
+                        $contentId = DB::instance()->insert('content',
+                            ['content' => $body['content'], 'mimetype' => $body['mimetype'], 'size' => $body['size']]
+                        );
+                        $id = DB::instance()->insert('dokument',
+                            ['name' => $body['name'], 'fk_content' => $contentId, 'fk_sponsor' => $args['id']]
+                        );
+                        $res = DB::instance()->fetchRow('SELECT d.id, d.name, c.mimetype, c.size FROM dokument AS d INNER JOIN content AS c on d.fk_content=c.id WHERE d.id=:id', ['id' => $id]);
+                        return $response->withJson($res);
+                    } catch (MysqlException $exception) {
+                        return $response->withJson(ErrorResponseCreator::create($exception->getMessage()), 422);
+                    }
+                });
+                $this->get('/{dokid}/file', function ($request, $response, $args) {
+                    $res = DB::instance()->fetchRow(
+                        'SELECT c.mimetype, c.content, c.size FROM dokument as d INNER JOIN content AS c ON d.fk_content = c.id WHERE d.id=:id',
+                        ['id' => $args['dokid']]
+                    );
+                    $response = $response->withHeader('Content-type', $res['mimetype'])->withHeader('Content-Length', $res['size']);
+                    $body = $response->getBody();
+                    $body->write(base64_decode($res['content']));
+                    return $response;
+                });
+                $this->delete('/{dokid}', function ($request, $response, $args) {
+                    DB::instance()->delete('dokument', ['id' => $args['dokid']]);
+                    return $response->withStatus(204);
+                });
+            });
+            $this->group('/{id}/logo', function () {
+                $this->get('', function ($request, $response) {
+                    $res = DB::instance()->fetchRowMany(
+                        'SELECT l.id, l.name, l.dimension, c.mimetype, c.size FROM logo AS l LEFT JOIN content AS c ON l.fk_content=c.id'
+                    );
+                    return $response->withJson($res);
+                });
+                $this->post('', function ($request, $response, $args) {
+                    $body = $request->getParsedBody();
+                    try {
+                        $contentId = DB::instance()->insert('content',
+                            ['content' => $body['content'], 'mimetype' => $body['mimetype'], 'size' => $body['size']]
+                        );
+                        $id = DB::instance()->insert('logo',
+                            ['name' => $body['name'], 'dimension' => $body['dimension'], 'fk_content' => $contentId, 'fk_sponsor' => $args['id']]
+                        );
+                        $res = DB::instance()->fetchRow('SELECT l.id, l.name, c.mimetype, c.size FROM logo AS l INNER JOIN content AS c on l.fk_content=c.id WHERE l.id=:id', ['id' => $id]);
+                        return $response->withJson($res);
+                    } catch (MysqlException $exception) {
+                        return $response->withJson(ErrorResponseCreator::create($exception->getMessage()), 422);
+                    }
+                });
+                $this->get('/{logoid}/file', function ($request, $response, $args) {
+                    $res = DB::instance()->fetchRow(
+                        'SELECT c.mimetype, c.content, c.size FROM logo AS l INNER JOIN content AS c ON l.fk_content = c.id WHERE l.id=:id',
+                        ['id' => $args['logoid']]
+                    );
+                    $response = $response->withHeader('Content-type', $res['mimetype'])->withHeader('Content-Length', $res['size']);
+                    $body = $response->getBody();
+                    $body->write(base64_decode($res['content']));
+                    return $response;
+                });
+                $this->delete('/{logoid}', function ($request, $response, $args) {
+                    DB::instance()->delete('logo', ['id' => $args['logoid']]);
+                    return $response->withStatus(204);
+                });
+            });
         });
 
         $this->app->group(self::getPath() . '/sponsor/{sponsorid}/engagement', function () {

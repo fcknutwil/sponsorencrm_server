@@ -1,4 +1,7 @@
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS logo;
+DROP TABLE IF EXISTS dokument;
+DROP TABLE IF EXISTS content;
 DROP TABLE IF EXISTS sponsor_engagement;
 DROP TABLE IF EXISTS engagement_typ;
 DROP TABLE IF EXISTS typ;
@@ -57,6 +60,33 @@ CREATE TABLE sponsor (
   telefon_ansprechpartner  VARCHAR(16) DEFAULT NULL,
   typ           ENUM('company', 'individual') NOT NULL DEFAULT 'company',
   FOREIGN KEY (fk_ort) REFERENCES ort(id)
+);
+
+CREATE TABLE content(
+  id        INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  mimtype   VARCHAR(50) NOT NULL UNIQUE KEY,
+  size      INT(4) DEFAULT 0,
+  content   LONGBLOB NOT NULL
+);
+
+CREATE TABLE dokument (
+  id            INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  name          VARCHAR(50) NOT NULL UNIQUE KEY,
+  fk_content     INT(6) UNSIGNED NOT NULL,
+  fk_sponsor     INT(6) UNSIGNED NOT NULL,
+  FOREIGN KEY (fk_content) REFERENCES content(id) ON DELETE CASCADE,
+  FOREIGN KEY (fk_sponsor) REFERENCES sponsor(id)
+);
+
+
+CREATE TABLE logo (
+  id            INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  name          VARCHAR(50) NOT NULL UNIQUE KEY,
+  dimension     VARCHAR(12) DEFAULT '',
+  fk_content    INT(6) UNSIGNED NOT NULL,
+  fk_sponsor    INT(6) UNSIGNED NOT NULL,
+  FOREIGN KEY (fk_content) REFERENCES content(id) ON DELETE CASCADE,
+  FOREIGN KEY (fk_sponsor) REFERENCES sponsor(id)
 );
 
 CREATE TABLE sponsor_engagement (
