@@ -30,6 +30,7 @@ $app->add(new \Tuupola\Middleware\JwtAuthentication([
     }
 ]));
 new \ch\fcknutwil\Login($app);
+new \ch\fcknutwil\Download($app);
 new \ch\fcknutwil\api\Sponsor($app);
 new \ch\fcknutwil\api\Engagement($app);
 new \ch\fcknutwil\api\Typ($app);

@@ -172,16 +172,6 @@ class Sponsor extends Base
                         return $response->withJson(ErrorResponseCreator::create($exception->getMessage()), 422);
                     }
                 });
-                $this->get('/{dokid}/file', function ($request, $response, $args) {
-                    $res = DB::instance()->fetchRow(
-                        'SELECT c.mimetype, c.content, c.size FROM dokument as d INNER JOIN content AS c ON d.fk_content = c.id WHERE d.id=:id',
-                        ['id' => $args['dokid']]
-                    );
-                    $response = $response->withHeader('Content-type', $res['mimetype'])->withHeader('Content-Length', $res['size']);
-                    $body = $response->getBody();
-                    $body->write(base64_decode($res['content']));
-                    return $response;
-                });
                 $this->delete('/{dokid}', function ($request, $response, $args) {
                     DB::instance()->delete('dokument', ['id' => $args['dokid']]);
                     return $response->withStatus(204);
@@ -208,16 +198,6 @@ class Sponsor extends Base
                     } catch (MysqlException $exception) {
                         return $response->withJson(ErrorResponseCreator::create($exception->getMessage()), 422);
                     }
-                });
-                $this->get('/{logoid}/file', function ($request, $response, $args) {
-                    $res = DB::instance()->fetchRow(
-                        'SELECT c.mimetype, c.content, c.size FROM logo AS l INNER JOIN content AS c ON l.fk_content = c.id WHERE l.id=:id',
-                        ['id' => $args['logoid']]
-                    );
-                    $response = $response->withHeader('Content-type', $res['mimetype'])->withHeader('Content-Length', $res['size']);
-                    $body = $response->getBody();
-                    $body->write(base64_decode($res['content']));
-                    return $response;
                 });
                 $this->delete('/{logoid}', function ($request, $response, $args) {
                     DB::instance()->delete('logo', ['id' => $args['logoid']]);
