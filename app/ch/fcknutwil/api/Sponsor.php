@@ -151,9 +151,9 @@ class Sponsor extends Base
                 });
             });
             $this->group('/{id}/dokument', function () {
-                $this->get('', function ($request, $response) {
+                $this->get('', function ($request, $response, $args) {
                     $res = DB::instance()->fetchRowMany(
-                        'SELECT d.id, d.name, c.mimetype, c.size FROM dokument AS d LEFT JOIN content AS c ON d.fk_content=c.id'
+                        'SELECT d.id, d.name, c.mimetype, c.size FROM dokument AS d LEFT JOIN content AS c ON d.fk_content=c.id WHERE d.fk_sponsor=:id', ['id' => $args['id']]
                     );
                     return $response->withJson($res);
                 });
@@ -178,9 +178,9 @@ class Sponsor extends Base
                 });
             });
             $this->group('/{id}/logo', function () {
-                $this->get('', function ($request, $response) {
+                $this->get('', function ($request, $response, $args) {
                     $res = DB::instance()->fetchRowMany(
-                        'SELECT l.id, l.name, l.dimension, c.mimetype, c.size FROM logo AS l LEFT JOIN content AS c ON l.fk_content=c.id'
+                        'SELECT l.id, l.name, l.dimension, c.mimetype, c.size FROM logo AS l LEFT JOIN content AS c ON l.fk_content=c.id WHERE l.fk_sponsor=:id', ['id' => $args['id']]
                     );
                     return $response->withJson($res);
                 });
