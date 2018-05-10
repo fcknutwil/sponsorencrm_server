@@ -17,6 +17,8 @@ class DashboardBuilder
             'select se.von, se.bis, e.betrag, e.seebli, e.zahlung from sponsor_engagement se inner join engagement e on se.fk_engagement = e.id');
 
         foreach ($res as $dbEntry) {
+            $now = new \DateTime();
+            $maxYear = $now->format('Y') + 3;
             $from = \DateTime::createFromFormat('Y-m-d', $dbEntry['von']);
             $fromYear = $from->format('Y');
             $to = \DateTime::createFromFormat('Y-m-d', $dbEntry['bis']);
@@ -25,7 +27,7 @@ class DashboardBuilder
             if($fromYear == $toYear || $dbEntry['zahlung'] == 'onetime') {
                 $this->add($fromYear, $dbEntry['betrag'], $dbEntry['seebli'], $dbEntry['zahlung']);
             } else {
-                for($year = $fromYear; $year <= $toYear && $year <=2030; $year++) {
+                for($year = $fromYear; $year <= min($toYear, $maxYear); $year++) {
                     $betrag = $dbEntry['betrag'];
                     if($year == $fromYear) {
                         $daysOfYear = $this->countDaysOfYear($from);
