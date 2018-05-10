@@ -36,5 +36,6 @@ new \ch\fcknutwil\api\Engagement($app);
 new \ch\fcknutwil\api\Typ($app);
 new \ch\fcknutwil\api\Ort($app);
 new \ch\fcknutwil\api\Beziehungen($app);
+new \ch\fcknutwil\api\Dashboard($app);
 // Run app
 $app->run();
