@@ -22,16 +22,19 @@ class Sponsor extends Base
         $this->app->group(self::getPath() . '/sponsor', function () {
             $this->get('', function ($request, $response) {
                 $res = DB::instance()->fetchRowMany('
-                  SELECT s.*, CONCAT(o.plz, " ", o.ort) AS ortstring, CONCAT(u.vorname, " ", u.nachname) AS changedUser 
+                  SELECT s.*, CONCAT(o.plz, " ", o.ort) AS ortstring
                   FROM sponsor AS s 
                   LEFT JOIN ort AS o ON s.fk_ort=o.id
-                  LEFT JOIN users AS u ON s.changed_user=u.id 
                   ORDER BY s.name, s.vorname');
                 return $response->withJson($res);
             });
             $this->get('/{id}', function ($request, $response, $args) {
-                $res = DB::instance()->fetchRow('SELECT s.*, CONCAT(o.plz, " ", o.ort) AS ortstring FROM sponsor AS s 
-                  LEFT JOIN ort AS o ON s.fk_ort=o.id WHERE s.id=:id', $args);
+                $res = DB::instance()->fetchRow('
+                  SELECT s.*, CONCAT(o.plz, " ", o.ort) AS ortstring, CONCAT(u.vorname, " ", u.nachname) AS changedUser  
+                  FROM sponsor AS s 
+                  LEFT JOIN ort AS o ON s.fk_ort=o.id
+                  LEFT JOIN users AS u ON s.changed_user=u.id 
+                  WHERE s.id=:id', $args);
                 if ($res) {
                     return $response->withJson($res);
                 }
