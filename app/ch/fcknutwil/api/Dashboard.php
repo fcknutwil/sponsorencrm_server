@@ -3,6 +3,7 @@
 namespace ch\fcknutwil\api;
 
 use ch\fcknutwil\DashboardBuilder;
+use org\maesi\ErrorResponseCreator;
 use Slim\App;
 
 class Dashboard extends Base
@@ -19,7 +20,18 @@ class Dashboard extends Base
     {
         $this->app->group(self::getPath() . '/dashboard', function () {
             $this->get('', function ($request, $response) {
-                return $response->withJson(DashboardBuilder::build());
+                try {
+                    return $response->withJson(DashboardBuilder::builder()->build());
+                } catch (\Exception $exception) {
+                    return $response->withJson(ErrorResponseCreator::create($exception->getMessage()), 422);
+                }
+            });
+            $this->get('/{year}', function ($request, $response, $param) {
+                try {
+                    return $response->withJson(DashboardBuilder::builder()->withType(DashboardBuilder::$DETAIL)->withYear($param['year'])->build());
+                } catch (\Exception $exception) {
+                    return $response->withJson(ErrorResponseCreator::create($exception->getMessage()), 422);
+                }
             });
         });
     }
