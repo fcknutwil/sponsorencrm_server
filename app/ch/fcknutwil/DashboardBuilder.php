@@ -62,17 +62,11 @@ class DashboardBuilder
         foreach ($res as $dbEntry) {
             $now = new \DateTime();
             $maxYear = $now->format('Y') + 3;
-            $fromYear = \DateTime::createFromFormat('Y-m-d', $dbEntry['von'])->format('Y');
-            $toYear = \DateTime::createFromFormat('Y-m-d', $dbEntry['bis'])->format('Y');
 
-            if($fromYear == $toYear || $dbEntry['zahlung'] == 'onetime') {
-                $this->add($fromYear, $dbEntry['betrag'], $dbEntry['seebli'], $dbEntry['zahlung']);
-            } else {
-                for($year = $fromYear; $year <= min($toYear, $maxYear); $year++) {
-                    $betrag = $this->calculateProRata($year, $dbEntry['von'], $dbEntry['bis'], $dbEntry['betrag']);
+                for($year = $this->getYear($dbEntry['von']); $year <= min($this->getYear($dbEntry['bis']), $maxYear); $year++) {
+                    $betrag = $this->calculateProRata($year, $dbEntry['von'], $dbEntry['bis'], $dbEntry['betrag'], $dbEntry['zahlung']);
                     $this->add($year, $betrag, $dbEntry['seebli'], $dbEntry['zahlung']);
                 }
-            }
         }
     }
 
@@ -86,7 +80,7 @@ class DashboardBuilder
               ORDER BY zahlung, sponsor
           ", ['year' => $this->year]);
         foreach ($res as &$entry) {
-            $proRata = $this->calculateProRata($this->year, $entry['von'], $entry['bis'], $entry['betrag']);
+            $proRata = $this->calculateProRata($this->year, $entry['von'], $entry['bis'], $entry['betrag'], $entry['zahlung']);
             if($proRata != $entry['betrag']) {
                 $entry['betragProRata'] = $proRata;
             }
@@ -94,20 +88,30 @@ class DashboardBuilder
         $this->result = $res;
     }
 
-    private function calculateProRata($year, $von, $bis, $betrag) {
+    private function calculateProRata($year, $von, $bis, $betrag, $zahlung) {
+        if($this->getYear($von) == $this->getYear($bis)) {
+            return $betrag;
+        }
+
         $from = \DateTime::createFromFormat('Y-m-d', $von);
         $to = \DateTime::createFromFormat('Y-m-d', $bis);
-        if($year == $from->format('Y')) {
-            $daysOfYear = $this->countDaysOfYear($from);
+
+        $daysOfYear = $this->countDaysOfYear($year);
+
+        if($zahlung == 'onetime') {
+            $betrag = $betrag * $daysOfYear / ($from->diff($to)->format('%a') - 1) ;
+        }
+
+        if($year == $this->getYear($von)) {
             $betrag = $betrag / $daysOfYear * ($daysOfYear - $from->format('z'));
-        } else if($year == $toYear = $to->format('Y')) {
-            $daysOfYear = $this->countDaysOfYear($to);
+        } else if($year == $this->getYear($bis)) {
             $betrag = $betrag / $daysOfYear * $to->format('z');
         }
         return $betrag;
     }
 
-    private function countDaysOfYear(\DateTime $date) {
+    private function countDaysOfYear($year) {
+        $date = new \DateTime($year . '01-01');
         if($date->format('L')) {
             return 365;
         } else {
@@ -121,5 +125,10 @@ class DashboardBuilder
         }
 
         $this->result[$year]->add($betrag, $seebli, $zahlung);
+    }
+
+    private function getYear($year): string
+    {
+        return \DateTime::createFromFormat('Y-m-d', $year)->format('Y');
     }
 }
