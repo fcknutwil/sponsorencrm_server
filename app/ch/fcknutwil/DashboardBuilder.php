@@ -63,10 +63,10 @@ class DashboardBuilder
             $now = new \DateTime();
             $maxYear = $now->format('Y') + 3;
 
-                for($year = $this->getYear($dbEntry['von']); $year <= min($this->getYear($dbEntry['bis']), $maxYear); $year++) {
-                    $betrag = $this->calculateProRata($year, $dbEntry['von'], $dbEntry['bis'], $dbEntry['betrag'], $dbEntry['zahlung']);
-                    $this->add($year, $betrag, $dbEntry['seebli'], $dbEntry['zahlung']);
-                }
+            for($year = $this->getYear($dbEntry['von']); $year <= min($this->getYear($dbEntry['bis']), $maxYear); $year++) {
+                $betrag = $this->calculateProRata($year, $dbEntry['von'], $dbEntry['bis'], $dbEntry['betrag'], $dbEntry['zahlung']);
+                $this->add($year, $betrag, $dbEntry['seebli'], $dbEntry['zahlung']);
+            }
         }
     }
 
@@ -84,6 +84,7 @@ class DashboardBuilder
             if($proRata != $entry['betrag']) {
                 $entry['betragProRata'] = $proRata;
             }
+            $entry['seebli'] = $entry['seebli'] == '1';
         }
         $this->result = $res;
     }
