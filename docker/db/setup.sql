@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS logo;
 DROP TABLE IF EXISTS dokument;
 DROP TABLE IF EXISTS content;
+DROP TABLE IF EXISTS sponsor_engagement_ablauf;
 DROP TABLE IF EXISTS sponsor_engagement;
 DROP TABLE IF EXISTS engagement_typ;
 DROP TABLE IF EXISTS typ;
@@ -106,6 +107,14 @@ CREATE TABLE sponsor_engagement (
   FOREIGN KEY (fk_sponsor) REFERENCES sponsor(id),
   FOREIGN KEY (fk_engagement) REFERENCES engagement(id)
 );
+
+CREATE TABLE sponsor_engagement_ablauf (
+  id                      INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  status                  ENUM('open', 'done') NOT NULL DEFAULT 'open',
+  fk_sponsor_engagement   INT(6) UNSIGNED NOT NULL,
+  FOREIGN KEY (fk_sponsor_engagement) REFERENCES sponsor_engagement(id)
+);
+
 
 CREATE TABLE beziehung (
   id          INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,

@@ -1,5 +1,5 @@
 <?php
-require '../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 if($PROD_MODE) {
     require '../db.config.php';
@@ -7,4 +7,5 @@ if($PROD_MODE) {
     require '../dev.db.config.php';
 }
 \org\maesi\DB::config($db_config, $db_config_crm, $db_config_donatoren_crm);
+\ch\fcknutwil\SponsorEngagementAblauf::create();
 echo "DONE";

@@ -15,7 +15,7 @@ $phar->setStub($phar->createDefaultStub());
 
 // Create Index.php
 file_put_contents ( $destDir.'index.php', '<?php $PROD_MODE=true; include \'crm.phar\';');
-file_put_contents ( $destDir.'job.php', '<?php $PROD_MODE=true; $script = $argv[1] . ".php"; include \'phar:///\'.__DIR__.\'/crm.phar/jobs/\'.$script;');
+file_put_contents ( $destDir.'job.php', '<?php $PROD_MODE=true; $script = empty($argv[1]) ? \'expire\' : $argv[1]; include \'phar:///\'.__DIR__.\'/crm.phar/jobs/\'.$script.\'.php\';');
 
 // .htaccess
 copy('app/.htaccess', $destDir . '.htaccess');
