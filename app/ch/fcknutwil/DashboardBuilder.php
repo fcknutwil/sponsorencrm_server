@@ -72,7 +72,7 @@ class DashboardBuilder
 
     private function createDetail() {
         $res = DB::instance()->fetchRowMany("
-              SELECT IF(s.typ='company', s.name, CONCAT(s.vorname, ' ', s.name)) AS sponsor, e.name AS engagement, e.betrag, e.zahlung, e.seebli, se.von, se.bis 
+              SELECT s.id AS sponsorId, IF(s.typ='company', s.name, CONCAT(s.vorname, ' ', s.name)) AS sponsor, e.name AS engagement, e.betrag, e.zahlung, e.seebli, se.von, se.bis 
               FROM sponsor AS s 
               INNER JOIN sponsor_engagement AS se ON s.id=se.fk_sponsor 
               INNER JOIN engagement AS e ON se.fk_engagement=e.id 
